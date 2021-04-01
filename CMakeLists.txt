@@ -9,12 +9,13 @@ PROJECT(
     LANGUAGES CXX
 )
 
-SET( CMAKE_CXX_STANDARD          17  )
-SET( CMAKE_CXX_STANDARD_REQUIRED ON  )
-SET( CMAKE_CXX_EXTENSIONS        OFF )
-
-
+INCLUDE( CTest )
 INCLUDE( GNUInstallDirs )
+
+IF( EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake" )
+    INCLUDE( "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake" )
+    CONAN_SET_FIND_PATHS()
+ENDIF()
 
 
 ADD_LIBRARY( meta INTERFACE )
@@ -59,3 +60,8 @@ INSTALL(
 )
 
 EXPORT( EXPORT "jadematrix-meta-config" FILE "jadematrix-meta-config.cmake" )
+
+
+IF( BUILD_TESTING )
+    ADD_SUBDIRECTORY( "tests/" )
+ENDIF()

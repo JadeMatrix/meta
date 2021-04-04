@@ -14,6 +14,7 @@ ADD_CUSTOM_TARGET( tests ALL )
 
 FOREACH( CPP_VERSION IN ITEMS "17" "20" )
     FOREACH( SUITE IN ITEMS
+        "parameter_pack"
         "repeat_type"
     )
         ADD_EXECUTABLE( ${SUITE}_tests_${CPP_VERSION} )

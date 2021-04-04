@@ -13,7 +13,9 @@ INCLUDE( doctest )
 ADD_CUSTOM_TARGET( tests ALL )
 
 FOREACH( CPP_VERSION IN ITEMS "17" "20" )
-    FOREACH( SUITE IN ITEMS )
+    FOREACH( SUITE IN ITEMS
+        "repeat_type"
+    )
         ADD_EXECUTABLE( ${SUITE}_tests_${CPP_VERSION} )
         TARGET_SOURCES( ${SUITE}_tests_${CPP_VERSION} PRIVATE "${SUITE}.cpp" )
         TARGET_LINK_LIBRARIES( ${SUITE}_tests_${CPP_VERSION}

@@ -14,6 +14,7 @@ ADD_CUSTOM_TARGET( tests ALL )
 
 FOREACH( CPP_VERSION IN ITEMS "17" "20" )
     FOREACH( SUITE IN ITEMS
+        "is_constant_evaluated"
         "parameter_pack"
         "repeat_type"
     )

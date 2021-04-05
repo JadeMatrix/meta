@@ -28,6 +28,7 @@ ENDFOREACH()
 # Compilation failure tests
 FOREACH( CPP_VERSION IN ITEMS "17" "20" )
     FOREACH( COMPILE IN ITEMS
+        "non_fundamental_fundamental_cast"
         "repeat_type_too_few_args"
         "repeat_type_too_many_args"
         "repeat_type_wrong_type_args"

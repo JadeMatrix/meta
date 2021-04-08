@@ -37,6 +37,13 @@ namespace
 }
 
 
+namespace custom_namespace
+{
+    struct custom_type {};
+    std::tuple< int > fundamental_cast(custom_type) { return { 0 }; }
+}
+
+
 #define EMIT_FUND_FUNDCAST_TEST( TYPE ) \
     TEST_CASE( \
         "fundamental_cast for " #TYPE " (" JM_META_TEST_CPP_VERSION_STRING ")" \
@@ -50,6 +57,7 @@ namespace
             decltype( fundamental_cast( value ) ) \
         > ); \
         REQUIRE( std::get< 0 >( fundamental_cast( value ) ) == value ); \
+        REQUIRE( meta::has_fundamental_cast_v< TYPE > ); \
     }
 EMIT_FUND_FUNDCAST_TEST( bool               )
 EMIT_FUND_FUNDCAST_TEST( char               )
@@ -92,6 +100,8 @@ EMIT_FUND_FUNDCAST_TEST( long double        )
             decltype( fundamental_cast( usecs ) ) \
         > ); \
         REQUIRE( fundamental_cast( hours ) == fundamental_cast( usecs ) ); \
+        REQUIRE( meta::has_fundamental_cast_v< decltype( hours ) > ); \
+        REQUIRE( meta::has_fundamental_cast_v< decltype( usecs ) > ); \
     }
 EMIT_CHRONO_FUNDCAST_TEST( bool               )
 EMIT_CHRONO_FUNDCAST_TEST( char               )
@@ -130,6 +140,7 @@ EMIT_CHRONO_FUNDCAST_TEST( long double        )
             decltype( fundamental_cast( c ) ) \
         > ); \
         REQUIRE( fundamental_cast( c ) == std::tuple( real, imag ) ); \
+        REQUIRE( meta::has_fundamental_cast_v< decltype( c ) > ); \
     }
 EMIT_COMPLEX_FUNDCAST_TEST( bool               )
 EMIT_COMPLEX_FUNDCAST_TEST( char               )
@@ -146,3 +157,20 @@ EMIT_COMPLEX_FUNDCAST_TEST( float              )
 EMIT_COMPLEX_FUNDCAST_TEST( double             )
 EMIT_COMPLEX_FUNDCAST_TEST( long double        )
 #undef EMIT_COMPLEX_FUNDCAST_TEST
+
+
+TEST_CASE(
+    "fundamental_cast for custom type via ADL ("
+    JM_META_TEST_CPP_VERSION_STRING
+    ")"
+)
+{
+    REQUIRE( meta::has_fundamental_cast_v< custom_namespace::custom_type > );
+    {
+        using meta::fundamental_cast;
+        REQUIRE(
+            fundamental_cast( custom_namespace::custom_type{} )
+            == std::tuple< int >{ 0 }
+        );
+    }
+}

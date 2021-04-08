@@ -40,30 +40,6 @@ namespace JadeMatrix::meta
 #endif
 
 
-namespace JadeMatrix::meta // Castability detection ////////////////////////////
-{
-    template<
-        typename T,
-        typename = void
-    > struct has_fundamental_cast : std::false_type {};
-    
-    template<
-        typename T
-    > constexpr auto has_fundamental_cast_v = has_fundamental_cast< T >::value;
-    
-    template< typename T > struct has_fundamental_cast<
-        T,
-        std::void_t< decltype( fundamental_cast( std::declval< T >() ) ) >
-    > : std::true_type {};
-    
-    #ifdef __cpp_concepts
-    template<
-        typename T
-    > concept fundamental_castable = has_fundamental_cast_v< T >;
-    #endif
-}
-
-
 namespace JadeMatrix::meta // std::chrono::duration overload ///////////////////
 {
     template<
@@ -87,4 +63,31 @@ namespace JadeMatrix::meta // std::complex overload ////////////////////////////
             fundamental_cast( v.imag() )
         );
     }
+}
+
+
+namespace JadeMatrix::meta // Castability detection ////////////////////////////
+{
+    // This comes last so it picks up the overloads for types not in the
+    // `JadeMatrix::meta` namespace
+    
+    template<
+        typename T,
+        typename = void
+    > struct has_fundamental_cast : std::false_type {};
+    
+    template<
+        typename T
+    > constexpr auto has_fundamental_cast_v = has_fundamental_cast< T >::value;
+    
+    template< typename T > struct has_fundamental_cast<
+        T,
+        std::void_t< decltype( fundamental_cast( std::declval< T >() ) ) >
+    > : std::true_type {};
+    
+    #ifdef __cpp_concepts
+    template<
+        typename T
+    > concept fundamental_castable = has_fundamental_cast_v< T >;
+    #endif
 }

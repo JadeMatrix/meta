@@ -1,8 +1,3 @@
-CMAKE_MINIMUM_REQUIRED( VERSION 3.10 FATAL_ERROR #[[
-    Requiring 3.10+:
-        INCLUDE( doctest )
-]] )
-
 IF(
        "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"
     OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"
